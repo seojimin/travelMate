@@ -1,12 +1,18 @@
 package travelmate.demo.Users;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-@Getter
-@Setter
-public class UserDto {
+
+@Getter@Setter
+@Entity
+@Table(name = "Users")
+@Builder
+public class Users {
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     @Column(name = "email")
     private String email;
     @Column(name = "password")
@@ -21,5 +27,4 @@ public class UserDto {
     private String nationality;
     @Column(name = "language")
     private String language;
-
 }

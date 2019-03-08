@@ -8,23 +8,27 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UsersController {
 
     private final UsersRepository usersRepository;
     private final ModelMapper modelMapper;
+    private final UsersValidator usersValidator;
 
-    public UsersController(UsersRepository usersRepository, ModelMapper modelMapper){
+    public UsersController(UsersRepository usersRepository, ModelMapper modelMapper, UsersValidator usersValidator){
         this.usersRepository = usersRepository;
         this.modelMapper = modelMapper;
+        this.usersValidator = usersValidator;
     }
 
     @PostMapping
-    public ResponseEntity registration(@RequestBody @Valid UserDto userDto, Errors errors) {
+    public ResponseEntity registration(@RequestBody @Valid UsersDto usersDto, Errors errors) {
 
-        User user = modelMapper.map(userDto, User.class);
-        User createdUser = usersRepository.save(user);
+        Users user = modelMapper.map(usersDto, Users.class);
+        Users createdUser = usersRepository.save(user);
 
+        usersValidator.validate(usersDto,errors);
+        //
         if(errors.hasErrors()){
             return ResponseEntity.badRequest().body(errors);
         }
@@ -37,8 +41,6 @@ public class UsersController {
 
         return ResponseEntity.ok().body(null);
     }
-
-
 
 
 }
