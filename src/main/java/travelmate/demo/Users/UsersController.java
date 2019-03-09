@@ -22,19 +22,21 @@ public class UsersController {
         this.usersValidator = usersValidator;
     }
 
+    // get single id
     @GetMapping("/{id}")
     public ResponseEntity getId(@PathVariable String id){
-
         Users users = usersRepository.findById(Long.parseLong(id)).get();
         return ResponseEntity.ok().body(users);
     }
 
+    // get all the Users
     @GetMapping
     public ResponseEntity getUsers() {
         List<Users> usersList = usersRepository.findAll();
         return ResponseEntity.ok().body(usersList);
     }
 
+    // add an user
     @PostMapping
     public ResponseEntity registration(@RequestBody @Valid UsersDto usersDto, Errors errors) {
 
@@ -50,6 +52,16 @@ public class UsersController {
         return ResponseEntity.ok().body(createdUser);
     }
 
+    // update user
+    @PutMapping("/{id}")
+    public ResponseEntity updateUser(@RequestBody Users ){
+
+    }
+
+    // delete user
+
+
+    // ?
     @GetMapping
     public ResponseEntity signIn() {
 
