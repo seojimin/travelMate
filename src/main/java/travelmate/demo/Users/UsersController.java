@@ -6,6 +6,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -21,6 +22,19 @@ public class UsersController {
         this.usersValidator = usersValidator;
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity getId(@PathVariable String id){
+
+        Users users = usersRepository.findById(Long.parseLong(id)).get();
+        return ResponseEntity.ok().body(users);
+    }
+
+    @GetMapping
+    public ResponseEntity getUsers() {
+        List<Users> usersList = usersRepository.findAll();
+        return ResponseEntity.ok().body(usersList);
+    }
+
     @PostMapping
     public ResponseEntity registration(@RequestBody @Valid UsersDto usersDto, Errors errors) {
 
@@ -28,7 +42,7 @@ public class UsersController {
         Users createdUser = usersRepository.save(user);
 
         usersValidator.validate(usersDto,errors);
-        //
+
         if(errors.hasErrors()){
             return ResponseEntity.badRequest().body(errors);
         }
