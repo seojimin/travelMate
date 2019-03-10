@@ -36,7 +36,7 @@ public class UsersController {
         return ResponseEntity.ok().body(usersList);
     }
 
-    // add an user
+    // save
     @PostMapping
     public ResponseEntity registration(@RequestBody @Valid UsersDto usersDto, Errors errors) {
 
@@ -44,29 +44,34 @@ public class UsersController {
         Users createdUser = usersRepository.save(user);
 
         usersValidator.validate(usersDto,errors);
-
-        if(errors.hasErrors()){
-            return ResponseEntity.badRequest().body(errors);
-        }
+        if(errors.hasErrors()){ return ResponseEntity.badRequest().body(errors);}
 
         return ResponseEntity.ok().body(createdUser);
     }
 
-    // update user
+    // update
     @PutMapping("/{id}")
-    public ResponseEntity updateUser(@RequestBody Users ){
+    public ResponseEntity updateUser(@PathVariable String id, @RequestBody @Valid UsersDto usersDto, Errors errors){
 
+        if(errors.hasErrors()){ return ResponseEntity.badRequest().body(errors);}
+
+        //Users user = modelMapper.map(usersDto, Users.class); - modelMapper 로 하는 거 일단 실패,,,
+        Users user = usersRepository.findById(Long.parseLong(id)).get();
+        user.setEmail(usersDto.getEmail());
+        user.setName(usersDto.getName());
+
+        Users updatedUser = usersRepository.save(user);
+
+        return ResponseEntity.ok().body(updatedUser);
     }
 
-    // delete user
 
+    // delete
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable String id){
 
-    // ?
-    @GetMapping
-    public ResponseEntity signIn() {
+        usersRepository.deleteById(Long.parseLong(id));
 
-        return ResponseEntity.ok().body(null);
+        return ResponseEntity.noContent().build();
     }
-
-
 }
