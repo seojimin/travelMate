@@ -65,7 +65,6 @@ public class UsersController {
         return ResponseEntity.ok().body(updatedUser);
     }
 
-
     // delete
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable String id){
