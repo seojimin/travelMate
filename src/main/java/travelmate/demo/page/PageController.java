@@ -1,4 +1,4 @@
-package travelmate.demo.Page;
+package travelmate.demo.page;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

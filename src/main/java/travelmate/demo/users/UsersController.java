@@ -1,5 +1,6 @@
-package travelmate.demo.Users;
+package travelmate.demo.users;
 
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -9,6 +10,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/users")
 public class UsersController {
 
@@ -16,11 +18,11 @@ public class UsersController {
     private final ModelMapper modelMapper;
     private final UsersValidator usersValidator;
 
-    public UsersController(UsersRepository usersRepository, ModelMapper modelMapper, UsersValidator usersValidator){
-        this.usersRepository = usersRepository;
-        this.modelMapper = modelMapper;
-        this.usersValidator = usersValidator;
-    }
+//    public UsersController(UsersRepository usersRepository, ModelMapper modelMapper, UsersValidator usersValidator){
+//        this.usersRepository = usersRepository;
+//        this.modelMapper = modelMapper;
+//        this.usersValidator = usersValidator;
+//    }
 
     // get single id
     @GetMapping("/{id}")
@@ -29,7 +31,7 @@ public class UsersController {
         return ResponseEntity.ok().body(users);
     }
 
-    // get all the Users
+    // get all the users
     @GetMapping
     public ResponseEntity getUsers() {
         List<Users> usersList = usersRepository.findAll();
@@ -55,7 +57,7 @@ public class UsersController {
 
         if(errors.hasErrors()){ return ResponseEntity.badRequest().body(errors);}
 
-        //Users user = modelMapper.map(usersDto, Users.class); - modelMapper 로 하는 거 일단 실패,,,
+        //users user = modelMapper.map(usersDto, users.class); - modelMapper 로 하는 거 일단 실패,,,
         Users user = usersRepository.findById(Long.parseLong(id)).get();
         user.setEmail(usersDto.getEmail());
         user.setName(usersDto.getName());

@@ -1,4 +1,4 @@
-package travelmate.demo.Users;
+package travelmate.demo.users;
 
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
