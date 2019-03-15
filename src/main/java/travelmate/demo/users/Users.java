@@ -28,4 +28,25 @@ public class Users {
     private String nationality;
     @Column(name = "language")
     private String language;
+
+//    private Long matchid;//
 }
+//////////////////////////////////////////////
+// id    email   gender  ... matchid
+//  1                           1
+//  2                           2
+//  3                           1
+//  4                           2
+//  5                           3
+//////////////////////////////////////////////
+
+//travel * user where matchid = 1;
+
+//////////////////////////////////////////////
+// matchid  city   country    .......
+//  1
+//  2
+//  3
+//  4
+//  5
+// ////////////////////////////////////////////
