@@ -43,14 +43,14 @@ public class TravelController {
         return ResponseEntity.ok().body(travel);
     }
 
-    //Get 핉터된 부분이 나오는 메서드.
+    //Get 핉터된 부분이 나오는 메서드
     @GetMapping
     public ResponseEntity getMatchByDate(@RequestParam(value = "startDate",required = false, defaultValue = "") Date startDate, @RequestParam Date endDate){
         travelRepository.findByStartDateBefore(startDate, endDate); //List 받아오기
         return null;
     }
 
-    //save - 내 여행 스타일 등록
+    //save 사용자 여행 스타일 등록
     @PostMapping
     public ResponseEntity saveTravel(@RequestBody @Valid TravelDto travelDto, Errors errors){
         if (errors.hasErrors()){ return ResponseEntity.badRequest().body(errors); }

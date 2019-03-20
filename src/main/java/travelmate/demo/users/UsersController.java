@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -55,11 +56,23 @@ public class UsersController {
         return ResponseEntity.ok().body(createdUser);
     }
 
+    private ResponseEntity hasPermission(String id, Errors errors, HttpSession session){
+
+        Object tempUser = session.getAttribute("sessionUser");
+        if(tempUser == null){ return ResponseEntity.badRequest().body(errors);}
+        Users sessionUser = (Users)tempUser;
+        if(!id.equals(sessionUser.getId())){ return ResponseEntity.badRequest().body(errors); }
+
+        return ResponseEntity.badRequest().body(errors);
+    }
+
     // update
     @PutMapping("/{id}")
-    public ResponseEntity updateUser(@PathVariable String id, @RequestBody @Valid UsersDto usersDto, Errors errors) {
+    public ResponseEntity updateUser(@PathVariable String id, @RequestBody @Valid UsersDto usersDto, Errors errors, HttpSession session) {
 
         if (errors.hasErrors()) { return ResponseEntity.badRequest().body(errors); }
+
+        hasPermission(id, errors, session);
 
         //Users user = modelMapper.map(usersDto, users.class); - modelMapper 로 하는 거 일단 실패,,,
         Users user = usersRepository.findById(Long.parseLong(id)).get();
@@ -77,7 +90,9 @@ public class UsersController {
 
     // delete
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable String id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable String id, Errors errors, HttpSession session) {
+
+        hasPermission(id, errors, session);
 
         usersRepository.deleteById(Long.parseLong(id));
 
