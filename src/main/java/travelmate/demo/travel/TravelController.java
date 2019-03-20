@@ -44,10 +44,11 @@ public class TravelController {
     }
 
     //Get 핉터된 부분이 나오는 메서드
-    @GetMapping
-    public ResponseEntity getMatchByDate(@RequestParam(value = "startDate",required = false, defaultValue = "") Date startDate, @RequestParam Date endDate){
-        travelRepository.findByStartDateBefore(startDate, endDate); //List 받아오기
-        return null;
+    @GetMapping("/date")                    //@PathVariables 과 달리 URL이 아닌 URL에 담긴 값
+    public ResponseEntity getMatchByDate(@RequestParam(value = "startDate",required = false, defaultValue = "") Date startDate,
+                                         @RequestParam(value = "endDate",required = false, defaultValue = "") Date endDate){
+        List<Travel> travelDate = travelRepository.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(startDate, endDate);
+        return ResponseEntity.ok().body(travelDate);
     }
 
     //save 사용자 여행 스타일 등록
@@ -69,7 +70,7 @@ public class TravelController {
         //로그인한 사용자의 요청이 아닌 다른 사용자의 요청이면 error발생
         Travel sessionUser = (Travel)tempUser;
         if(!id.equals(sessionUser.getId())){ return ResponseEntity.badRequest().body(errors); }
-        // 리턴이 이런식이어도 가능한가????
+
         return ResponseEntity.badRequest().body(errors);
     }
 
