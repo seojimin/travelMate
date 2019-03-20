@@ -1,6 +1,7 @@
 package travelmate.demo.users;
 
-import lombok.AllArgsConstructor;
+//import lombok.AllArgsConstructor;
+import lombok.Builder;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -10,7 +11,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@AllArgsConstructor
+//@AllArgsConstructor
 @RequestMapping("/users")
 public class UsersController {
 
@@ -18,11 +19,13 @@ public class UsersController {
     private final ModelMapper modelMapper;
     private final UsersValidator usersValidator;
 
-    /*    public UsersController(UsersRepository usersRepository, ModelMapper modelMapper, UsersValidator usersValidator){
-            this.usersRepository = usersRepository;
-            this.modelMapper = modelMapper;
-            this.usersValidator = usersValidator;
-        }*/
+    @Builder //builder pattern 을 만들어주지만 생성자에서만 사용해야함
+    public UsersController(UsersRepository usersRepository, ModelMapper modelMapper, UsersValidator usersValidator) {
+        this.usersRepository = usersRepository;
+        this.modelMapper = modelMapper;
+        this.usersValidator = usersValidator;
+    }
+
     // get all the users
     @GetMapping
     public ResponseEntity getUsers() {
@@ -38,7 +41,7 @@ public class UsersController {
     }
 
     // save
-    @PostMapping
+    @PostMapping                    //요청온 JSON 을 Java class로 mapping
     public ResponseEntity registration(@RequestBody @Valid UsersDto usersDto, Errors errors) {
 
         Users user = modelMapper.map(usersDto, Users.class);
@@ -56,14 +59,16 @@ public class UsersController {
     @PutMapping("/{id}")
     public ResponseEntity updateUser(@PathVariable String id, @RequestBody @Valid UsersDto usersDto, Errors errors) {
 
-        if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().body(errors);
-        }
+        if (errors.hasErrors()) { return ResponseEntity.badRequest().body(errors); }
 
         //Users user = modelMapper.map(usersDto, users.class); - modelMapper 로 하는 거 일단 실패,,,
         Users user = usersRepository.findById(Long.parseLong(id)).get();
         user.setEmail(usersDto.getEmail());
         user.setName(usersDto.getName());
+        user.setAge(usersDto.getAge());
+        user.setGender(usersDto.getGender());
+        user.setLanguage(usersDto.getLanguage());
+        user.setNationality(usersDto.getNationality());
 
         Users updatedUser = usersRepository.save(user);
 

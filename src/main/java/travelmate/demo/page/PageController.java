@@ -21,4 +21,6 @@ public class PageController {
         return "signIn";
     }
 
+    ////signOut용 session clear 도 만들어주기
+
 }

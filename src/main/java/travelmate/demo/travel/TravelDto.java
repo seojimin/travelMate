@@ -1,16 +1,16 @@
 package travelmate.demo.travel;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.validation.constraints.NotEmpty;
 
-@Setter @Getter
-@NoArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED) //parameter가 없는 생성자를 만들어 준다. AccessLevel 로는 낮은 접근지시자를 이용.
+@AllArgsConstructor //@Setter 대신 사용. 모든 fields를 parameter 로 받는 생성자
 public class TravelDto {
 
+    //@NotNull 과 다르게 null과 "" 둘 다 허용하지 않
     @NotEmpty
     @Column(name = "startDate")
     private String startDate;

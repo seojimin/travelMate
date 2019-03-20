@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-
+//@Data annotation 은 Setter의 남발. 사용지양
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter @Setter
 @Entity
