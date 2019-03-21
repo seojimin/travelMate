@@ -35,7 +35,7 @@ public class UsersController {
     }
 
     // get single id
-    @GetMapping("/{id}")
+    @GetMapping("/users/{id}")
     public ResponseEntity getId(@PathVariable String id) {
         Users users = usersRepository.findById(Long.parseLong(id)).get();
         return ResponseEntity.ok().body(users);
@@ -67,7 +67,7 @@ public class UsersController {
     }
 
     // update
-    @PutMapping("/{id}")
+    @PutMapping("/users/{id}")
     public ResponseEntity updateUser(@PathVariable String id, @RequestBody @Valid UsersDto usersDto, Errors errors, HttpSession session) {
 
         if (errors.hasErrors()) { return ResponseEntity.badRequest().body(errors); }
@@ -89,7 +89,7 @@ public class UsersController {
     }
 
     // delete
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/users/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable String id, Errors errors, HttpSession session) {
 
         hasPermission(id, errors, session);

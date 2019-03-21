@@ -30,15 +30,15 @@ public class TravelController {
     }
 
     //전체 travel - pagination(페이지 수 제한) PageRequest
-    @GetMapping("/list")
+    @GetMapping("/travels")
     public ResponseEntity getAllTravel(@PathVariable Integer pNo){
         PageRequest pg = PageRequest.of(pNo-1, 20); //JPA 는 페이지가 0부터 존재. 0이 1번 페이
-        List<Travel> travelList = travelRepository.findAllByOrderByIdDesc(pg); // Desc으로 최신부터 확인
+        List<Travel> travelList = travelRepository.findAllByOrderByIdDesc(pg); //Desc으로 최신부터 확인
         return ResponseEntity.ok().body(travelList);
     }
 
     //get single id
-    @GetMapping("/{id}")
+    @GetMapping("/travels/{id}")
     public ResponseEntity getTravel(@PathVariable String id){
         Travel travel = travelRepository.findById(Long.parseLong(id)).get();
         return ResponseEntity.ok().body(travel);
@@ -69,7 +69,7 @@ public class TravelController {
     }
 
     //update - 로그인한 사용자만 update
-    @PutMapping("/{id}")
+    @PutMapping("/travels/{id}")
     public ResponseEntity updateTravel(@PathVariable String id, @RequestBody @Valid TravelDto travelDto, Errors errors, HttpSession session){
         if(errors.hasErrors()){ return ResponseEntity.badRequest().body(errors);}
 
@@ -82,6 +82,8 @@ public class TravelController {
         travel.setCountry(travelDto.getCountry());
         travel.setStartDate(travelDto.getStartDate());
         travel.setEndDate(travelDto.getEndDate());
+        travel.setStartTime(travelDto.getStartTime());
+        travel.setEndTime(travelDto.getEndTime());
         travel.setAge(travelDto.getAge());
         travel.setGender(travelDto.getGender());
 
@@ -90,7 +92,7 @@ public class TravelController {
     }
 
     //delete - putmapping msg만 보이게. 작성자라면 삭제가능하게
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/travels/{id}")
     public ResponseEntity deleteTravel(@PathVariable @Valid String id, Errors errors, HttpSession session){
         if(errors.hasErrors()){ return ResponseEntity.badRequest().body(errors);}
         hasPermission(id, errors, session);
@@ -102,7 +104,7 @@ public class TravelController {
     }
 
     //Get date
-    @GetMapping("/date")       //@PathVariables 과 달리 URL이 아닌 URL에 담긴 값       //required = false => parameter없을때 null
+    @GetMapping("/travels/date")       //@PathVariables 과 달리 URL이 아닌 URL에 담긴 값       //required = false => parameter없을때 null
     public ResponseEntity matchDate(@RequestParam(value = "startDate",required = false, defaultValue = "") Date startDate,
                                     @RequestParam(value = "endDate",required = false, defaultValue = "") Date endDate){
         List<Travel> travelDate = travelRepository.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(startDate, endDate);
@@ -110,7 +112,7 @@ public class TravelController {
     }
 
     //Get time
-    @GetMapping("/time")
+    @GetMapping("/travels/time")
     public ResponseEntity matchTime(@RequestParam(value = "startTime",required = false, defaultValue = "") Time startTime,
                                     @RequestParam(value = "endTime", required = false, defaultValue = "") Time endTime){
         List<Travel> travelTime = travelRepository.findAllByStartTimeLessThanEqualAndEndDateGreaterThanEqual(startTime, endTime);
