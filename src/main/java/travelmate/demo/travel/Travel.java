@@ -19,6 +19,10 @@ public class Travel {
     private String startDate;
     @Column(name = "endDate")
     private String endDate;
+    @Column(name = "startTime")
+    private String startTime;
+    @Column(name = "endTime")
+    private String endTime;
     @Column(name = "country")
     private String country;
     @Column(name = "city")

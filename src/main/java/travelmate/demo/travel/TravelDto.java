@@ -23,6 +23,10 @@ public class TravelDto {
     @NotEmpty
     @Column(name = "city")
     private int city;
+    @Column(name = "startTime")
+    private String startTime;
+    @Column(name = "endTime")
+    private String endTime;
     @Column(name = "NumOfPeople")
     private String NumOfPeople;
     @Column(name = "age")

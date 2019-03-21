@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.sql.Time;
 import java.util.Date;
 import java.util.List;
 
@@ -36,19 +37,11 @@ public class TravelController {
         return ResponseEntity.ok().body(travelList);
     }
 
-    //id하나만 get
+    //get single id
     @GetMapping("/{id}")
     public ResponseEntity getTravel(@PathVariable String id){
         Travel travel = travelRepository.findById(Long.parseLong(id)).get();
         return ResponseEntity.ok().body(travel);
-    }
-
-    //Get 핉터된 부분이 나오는 메서드
-    @GetMapping("/date")                    //@PathVariables 과 달리 URL이 아닌 URL에 담긴 값
-    public ResponseEntity getMatchByDate(@RequestParam(value = "startDate",required = false, defaultValue = "") Date startDate,
-                                         @RequestParam(value = "endDate",required = false, defaultValue = "") Date endDate){
-        List<Travel> travelDate = travelRepository.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(startDate, endDate);
-        return ResponseEntity.ok().body(travelDate);
     }
 
     //save 사용자 여행 스타일 등록
@@ -62,6 +55,7 @@ public class TravelController {
         return ResponseEntity.ok().body(createTravel);
     }
 
+    //session
     private ResponseEntity hasPermission(String id, Errors errors, HttpSession session){
         //Session에서 값을 꺼내면 Object type으로 리턴
         //로그인이 안된 상태면 error발생
@@ -107,6 +101,26 @@ public class TravelController {
         return ResponseEntity.noContent().build();
     }
 
+    //Get date
+    @GetMapping("/date")       //@PathVariables 과 달리 URL이 아닌 URL에 담긴 값       //required = false => parameter없을때 null
+    public ResponseEntity matchDate(@RequestParam(value = "startDate",required = false, defaultValue = "") Date startDate,
+                                    @RequestParam(value = "endDate",required = false, defaultValue = "") Date endDate){
+        List<Travel> travelDate = travelRepository.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(startDate, endDate);
+        return ResponseEntity.ok().body(travelDate);
+    }
+
+    //Get time
+    @GetMapping("/time")
+    public ResponseEntity matchTime(@RequestParam(value = "startTime",required = false, defaultValue = "") Time startTime,
+                                    @RequestParam(value = "endTime", required = false, defaultValue = "") Time endTime){
+        List<Travel> travelTime = travelRepository.findAllByStartTimeLessThanEqualAndEndDateGreaterThanEqual(startTime, endTime);
+        return ResponseEntity.ok().body(travelTime);
+    }
+
+    //Get country
+    //Get City
+    //Get Language
+    //Get TravelType
 }
 
 //travel * from matches where startDate > today and endDate< 9999-12-31;
