@@ -16,11 +16,11 @@ public class PageController {
         return "registration";
     }
 
-    @GetMapping("/signIn")
-    public String signIn() {
-        return "signIn";
+    @GetMapping("/logIn")
+    public String logIn() {
+        return "logIn";
     }
 
-    ////signOut용 session clear 도 만들어주기
+    ////logOut용 session clear 도 만들어주기
 
 }

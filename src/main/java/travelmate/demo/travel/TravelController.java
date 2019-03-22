@@ -30,7 +30,7 @@ public class TravelController {
     }
 
     //전체 travel - pagination(페이지 수 제한) PageRequest
-    @GetMapping("/travels")
+    @GetMapping
     public ResponseEntity getAllTravel(@PathVariable Integer pNo){
         PageRequest pg = PageRequest.of(pNo-1, 20); //JPA 는 페이지가 0부터 존재. 0이 1번 페이
         List<Travel> travelList = travelRepository.findAllByOrderByIdDesc(pg); //Desc으로 최신부터 확인
@@ -118,11 +118,6 @@ public class TravelController {
         List<Travel> travelTime = travelRepository.findAllByStartTimeLessThanEqualAndEndDateGreaterThanEqual(startTime, endTime);
         return ResponseEntity.ok().body(travelTime);
     }
-
-    //Get country
-    //Get City
-    //Get Language
-    //Get TravelType
 }
 
 //travel * from matches where startDate > today and endDate< 9999-12-31;
